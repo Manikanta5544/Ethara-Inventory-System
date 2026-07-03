@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.core.database import SessionLocal
 from app.repositories.product_repository import ProductRepository
+from app.repositories.order_repository import OrderRepository
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +17,7 @@ class UnitOfWork:
         self.session: Session = session or SessionLocal()
         # Repos initialised immediately so callers can use UoW without `with`
         self.products  = ProductRepository(self.session)
+        self.orders = OrderRepository(self.session)
 
     def __enter__(self) -> "UnitOfWork":
         return self
