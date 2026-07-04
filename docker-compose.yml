@@ -1,0 +1,106 @@
+name: ethara-inventory-system
+
+services:
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: ethara_postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: inventory_db
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U inventory_user -d inventory_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    networks:
+      - ethara-network
+
+
+
+  backend:
+    container_name: ethara_backend
+
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    restart: unless-stopped
+
+    env_file:
+      - ./backend/.env
+
+    environment:
+      DATABASE_URL: postgresql+psycopg2://inventory_user:inventory_pass@postgres:5432/inventory_db
+
+    ports:
+      - "8000:8000"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "--fail",
+          "http://localhost:8000/api/health/ready"
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+    networks:
+      - ethara-network
+
+
+
+  frontend:
+    container_name: ethara_frontend
+
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+      args:
+        VITE_API_URL: http://localhost:8000/api/v1
+
+    restart: unless-stopped
+
+    ports:
+      - "5173:80"
+
+    depends_on:
+      backend:
+        condition: service_healthy
+
+    networks:
+      - ethara-network
+
+
+
+volumes:
+
+  postgres_data:
+
+
+
+networks:
+
+  ethara-network:
+    driver: bridge
