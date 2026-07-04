@@ -1,5 +1,5 @@
-from domain.pricing import PricingDomain
-from domain.inventory import InventoryDomain
-from domain.ordering import OrderDomain
+from .pricing import PricingDomain
+from .inventory import InventoryDomain
+from .ordering import OrderDomain
 
 __all__= ["PricingDomain", "InventoryDomain", "OrderDomain"]
