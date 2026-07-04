@@ -1,4 +1,7 @@
+import logging
+
 from fastapi import FastAPI, Request, status
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
@@ -6,11 +9,15 @@ from sqlalchemy.exc import IntegrityError
 
 from app.api.v1 import router as v1_router
 from app.core.config import settings
+from app.core.logging_config import configure_logging
 from app.core.database import engine
 from app.exceptions.base import AppException
 from app.middleware.logging import AccessLogMiddleware
 from app.middleware.request_id import RequestIDMiddleware
 from app.middleware.timing import TimingMiddleware
+
+configure_logging()
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title=settings.APP_NAME,
