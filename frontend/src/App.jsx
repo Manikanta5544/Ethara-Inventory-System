@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./shared/components/layout/AppLayout";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { ProductsPage } from "./pages/ProductsPage";
+import { CustomersPage } from "./pages/CustomersPage";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
       <AppLayout>
         <Routes>
           <Route path="/products" element={<ProductsPage />} />
+          <Route path="/customers" element={<CustomersPage />} />
           <Route path="*"           element={<NotFoundPage />} />
         </Routes>
       </AppLayout>
