@@ -35,16 +35,16 @@ jobs:
 
       - name: Run backend tests
         env:
-          DATABASE_URL: sqlite+pysqlite:///:memory:
+          DATABASE_URL: "sqlite+pysqlite:///:memory:"
           ENVIRONMENT: testing
           SECRET_KEY: test-secret-key
           LOG_LEVEL: INFO
         run: |
           pytest tests \
-          --tb=short \
-          --cov=app \
-          --cov-report=term-missing \
-          --cov-fail-under=70
+            --tb=short \
+            --cov=app \
+            --cov-report=term-missing \
+            --cov-fail-under=70
 
 
   frontend:
