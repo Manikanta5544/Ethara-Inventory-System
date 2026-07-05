@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Minus, Plus } from "lucide-react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { formatCurrency } from "../../../lib/utils";
 import { useCustomers } from "../../customers/hooks/useCustomers";
 import { useProducts } from "../../products/hooks/useProducts";
@@ -14,14 +14,18 @@ export function OrderForm({ onClose }) {
   const products  = prodData?.data ?? [];
   const createOrder = useCreateOrder({ onSuccess: onClose });
 
-  const { register, handleSubmit, control, watch, formState: { errors } } = useForm({
+  const { register, handleSubmit, control, formState: { errors } } = useForm({
     resolver: zodResolver(orderSchema),
     defaultValues: { customer_id: "", items: [{ product_id: "", quantity: 1 }] },
   });
   const { fields, append, remove } = useFieldArray({ control, name: "items" });
-  const watchedItems = watch("items");
+  const watchedItems =  useWatch({
+      control,
+      name: "items",
+      defaultValue: [{ product_id: "", quantity: 1 }],
+  });
 
-  const estimatedTotal = watchedItems.reduce((sum, item) => {
+  const estimatedTotal = (watchedItems ?? []).reduce((sum, item) =>  {
     const p = products.find((p) => p.id === Number(item.product_id));
     return sum + (p ? p.price * (Number(item.quantity) || 0) : 0);
   }, 0);
