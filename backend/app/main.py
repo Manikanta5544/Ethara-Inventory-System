@@ -49,13 +49,13 @@ async def app_exception_handler(request: Request, exc: AppException) -> JSONResp
         extra={
             "request_id": request_id,
             "path": request.url.path,
-            "err_message": exc.message,
+            "message": exc.message,
             "status_code": exc.status_code,
         },
     )
     return JSONResponse(
         status_code=exc.status_code,
-        content={"success": False, "err_message": exc.message, "details": exc.details},
+        content={"success": False, "message": exc.message, "details": exc.details},
     )
 
 
@@ -67,7 +67,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         content={
             "success": False,
             "message": "Request validation failed.",
-            "details": str(exc.errors()),
+            "details": exc.errors(),
         },
     )
 

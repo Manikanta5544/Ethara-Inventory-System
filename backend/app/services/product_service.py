@@ -24,12 +24,12 @@ class ProductService:
     def get_product(self, product_id: int) -> Product:
         product = self.uow.products.get(product_id)
         if not product:
-            raise ProductNotFoundError(f"Product {product_id} not found.")
+            raise ProductNotFoundError(product_id)
         return product
 
     def create_product(self, payload: ProductCreate) -> Product:
         if self.uow.products.get_by_sku(payload.sku):
-            raise DuplicateSKUError(f"SKU '{payload.sku}' already exists.")
+            raise DuplicateSKUError(payload.sku)
         product = Product(**payload.model_dump())
         self.uow.products.add(product)
         self.uow.commit()
@@ -42,7 +42,7 @@ class ProductService:
         updates = payload.model_dump(exclude_unset=True)
         if "sku" in updates and updates["sku"] != product.sku:
             if self.uow.products.get_by_sku(updates["sku"]):
-                raise DuplicateSKUError(f"SKU '{updates['sku']}' already exists.")
+                raise DuplicateSKUError(updates["sku"])
         for field, value in updates.items():
             setattr(product, field, value)
         self.uow.commit()

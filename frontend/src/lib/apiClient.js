@@ -7,14 +7,19 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    err.userMessage =
-      err.response?.data?.message ||
-      err.response?.data?.detail ||
-      err.message ||
+  (response) => response,
+  (error) => {
+    const data = error.response?.data;
+
+    error.userMessage =
+      data?.message ??
+      data?.err_message ??
+      data?.detail ??
+      data?.details?.message ??
+      error.message ??
       "An unexpected error occurred.";
-    return Promise.reject(err);
+
+    return Promise.reject(error);
   }
 );
 
