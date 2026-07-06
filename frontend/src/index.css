@@ -1,45 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Design tokens — the entire palette lives here. RGB triplets (not hex) so
+ * Tailwind opacity modifiers (bg-danger/10) work against these variables.
+ */
+:root {
+  --c-bg: 19 19 22;
+  --c-surface: 26 28 33;
+  --c-elevated: 35 37 43;
+  --c-border: 43 45 52;
+  --c-border-strong: 52 54 62;
+
+  --c-ink: 247 247 248;
+  --c-ink-secondary: 157 160 168;
+  --c-ink-muted: 107 110 119;
+
+  --c-accent-50: 36 30 18;
+  --c-accent-400: 214 191 143;
+  --c-accent: 201 166 103;
+  --c-accent-700: 168 136 79;
+  --c-accent-900: 110 88 51;
+
+  --c-success: 76 169 122;
+  --c-warning: 214 169 74;
+  --c-danger: 203 87 87;
+}
+
 @layer base {
-  * {
-    box-sizing: border-box;
+  * { box-sizing: border-box; }
+
+  html {
+    /* Subtle fixed radial glow instead of a flat void — the kind of depth
+       cue flat "generated" dark UIs almost never bother with. */
+    background-color: rgb(var(--c-bg));
+    background-image: radial-gradient(ellipse 900px 500px at 15% -10%, rgb(var(--c-accent) / 0.05), transparent 60%);
+    background-attachment: fixed;
   }
   body {
-    @apply bg-gray-50 text-gray-900 antialiased;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    @apply text-ink antialiased;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-feature-settings: "cv11", "ss01";
   }
+
+  ::selection {
+    background: rgb(var(--c-accent) / 0.3);
+    color: rgb(var(--c-ink));
+  }
+
+  /* Slim, unobtrusive scrollbar — default OS scrollbars break dark UIs. */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--c-border-strong));
+    border-radius: 9999px;
+    border: 2px solid rgb(var(--c-bg));
+  }
+  ::-webkit-scrollbar-thumb:hover { background: rgb(var(--c-ink-muted)); }
 }
 
 @layer components {
   .card {
-    @apply bg-white rounded-xl border border-gray-100 shadow-sm;
+    @apply bg-surface rounded-2xl border border-border;
+    box-shadow: inset 0 1px 0 0 rgb(255 255 255 / 0.04), 0 1px 3px 0 rgb(0 0 0 / 0.3);
   }
   .btn-primary {
-    @apply inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-[#141414] text-sm font-semibold rounded-xl hover:bg-primary-400 active:scale-[0.98] transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }
   .btn-secondary {
-    @apply inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-700 text-sm font-medium rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors;
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-transparent text-ink text-sm font-medium rounded-xl border border-border-strong hover:bg-elevated active:scale-[0.98] transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }
   .btn-danger {
-    @apply inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50;
+    @apply inline-flex items-center gap-2 px-4 py-2 bg-danger/90 text-white text-sm font-semibold rounded-xl hover:bg-danger active:scale-[0.98] transition-all duration-150 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }
   .input {
-    @apply w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all placeholder-gray-400;
+    @apply w-full px-3 py-2 text-sm bg-elevated text-ink border border-border-strong rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all placeholder-ink-muted;
   }
   .label {
-    @apply block text-sm font-medium text-gray-700 mb-1;
+    @apply block text-sm font-medium text-ink-secondary mb-1;
   }
   .error-text {
-    @apply text-xs text-red-500 mt-1;
+    @apply text-xs text-danger mt-1;
   }
   .badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border;
   }
-  .badge-green  { @apply badge bg-green-100 text-green-800; }
-  .badge-yellow { @apply badge bg-yellow-100 text-yellow-800; }
-  .badge-red    { @apply badge bg-red-100 text-red-800; }
-  .badge-gray   { @apply badge bg-gray-100 text-gray-700; }
-  .badge-blue   { @apply badge bg-blue-100 text-blue-800; }
+  .badge-green  { @apply badge bg-success/10 text-success border-success/30; }
+  .badge-yellow { @apply badge bg-warning/10 text-warning border-warning/30; }
+  .badge-red    { @apply badge bg-danger/10 text-danger border-danger/30; }
+  .badge-gray   { @apply badge bg-elevated text-ink-secondary border-border-strong; }
+  .badge-blue   { @apply badge bg-elevated text-ink-secondary border-border-strong; }
 }
