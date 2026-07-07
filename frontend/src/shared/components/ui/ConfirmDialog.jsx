@@ -6,7 +6,7 @@ export function ConfirmDialog({ isOpen, title, message, confirmLabel = "Confirm"
   return (
     <div role="alertdialog" aria-modal="true" className="fixed inset-0 z-50 flex items-center justify-center">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onCancel} />
-      <div className="relative bg-white rounded-xl shadow-xl p-6 w-full max-w-sm mx-4">
+      <div className="relative bg-surface border border-border-strong rounded-3xl shadow-sm p-6 w-full max-w-sm mx-4">
         <div className="flex gap-3 mb-4">
           <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${isDanger ? "bg-red-100" : "bg-yellow-100"}`}>
             <AlertTriangle className={`w-5 h-5 ${isDanger ? "text-red-600" : "text-yellow-600"}`} />
