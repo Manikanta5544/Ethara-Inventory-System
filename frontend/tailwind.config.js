@@ -1,8 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 
-// Colors are backed by CSS custom properties (defined in index.css) so the
-// whole palette lives in one place and still supports opacity modifiers
-// (e.g. bg-danger/10).
+
 function token(variable) {
   return ({ opacityValue }) =>
     opacityValue !== undefined ? `rgb(var(${variable}) / ${opacityValue})` : `rgb(var(${variable}))`;
@@ -29,11 +27,7 @@ export default {
         success: token("--c-success"),
         warning: token("--c-warning"),
         danger: token("--c-danger"),
-        // Tailwind's default gray scale is remapped to the same tokens above.
-        // This is what lets every component we did NOT touch (forms, dialogs,
-        // empty states, badges — all of which use plain text-gray-500,
-        // bg-gray-50, border-gray-100, etc.) automatically render correctly
-        // on the new dark surface, with zero edits to those files.
+
         gray: {
           50: token("--c-bg"),
           100: token("--c-surface"),
@@ -48,8 +42,6 @@ export default {
         },
       },
       borderRadius: {
-        // One consistent scale used everywhere: buttons/inputs 12px (xl,
-        // Tailwind default), cards 16px (2xl, default), modals 20px (below).
         "3xl": "1.25rem",
       },
     },

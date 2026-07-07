@@ -11,15 +11,15 @@ const NAV = [
 
 function Sidebar() {
   return (
-    <aside className="w-60 h-screen sticky top-0 bg-gray-900 flex flex-col shrink-0">
-      <div className="px-5 py-5 border-b border-gray-700/60">
+    <aside className="w-60 h-screen sticky top-0 bg-surface/80 backdrop-blur-xl border-r border-border flex flex-col shrink-0">
+      <div className="px-5 py-6 border-b border-border">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-primary-500 flex items-center justify-center">
-            <BarChart3 className="w-4 h-4 text-white" aria-hidden="true" />
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-elevated to-surface border border-border-strong flex items-center justify-center shrink-0">
+            <BarChart3 className="w-4 h-4 text-primary-500" aria-hidden="true" />
           </div>
-          <div>
-            <p className="text-white text-sm font-semibold leading-none">Inventory</p>
-            <p className="text-gray-400 text-xs mt-0.5">Management System</p>
+          <div className="min-w-0">
+            <p className="text-ink text-sm font-semibold leading-none tracking-tight truncate">Inventory</p>
+            <p className="text-ink-muted text-xs mt-1">Management System</p>
           </div>
         </div>
       </div>
@@ -32,21 +32,25 @@ function Sidebar() {
             end={to === "/"}
             className={({ isActive }) =>
               cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-primary-400",
+                "flex items-center gap-3 pl-[9px] pr-3 py-2.5 rounded-xl text-sm font-medium border-l-[3px] transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
                 isActive
-                  ? "bg-primary-600 text-white"
-                  : "text-gray-400 hover:bg-gray-800 hover:text-white"
+                  ? "bg-elevated border-primary-500 text-ink shadow-sm"
+                  : "border-transparent text-ink-secondary hover:bg-elevated/60 hover:text-ink"
               )
             }
           >
-            <Icon className="w-4 h-4 shrink-0" aria-hidden="true" />
-            {label}
+            {({ isActive }) => (
+              <>
+                <Icon className={cn("w-4 h-4 shrink-0 transition-colors duration-150", isActive ? "text-primary-500" : "text-ink-muted")} aria-hidden="true" />
+                {label}
+              </>
+            )}
           </NavLink>
         ))}
       </nav>
 
-      <div className="px-5 py-4 border-t border-gray-700/60">
-        <p className="text-gray-500 text-xs">v1.0.0 · Production Ready</p>
+      <div className="px-5 py-4 border-t border-border">
+        <p className="text-ink-muted text-xs tracking-wide">Version 1.0 · Production</p>
       </div>
     </aside>
   );

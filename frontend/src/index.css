@@ -3,10 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/*
- * Design tokens — the entire palette lives here. RGB triplets (not hex) so
- * Tailwind opacity modifiers (bg-danger/10) work against these variables.
- */
 :root {
   --c-bg: 19 19 22;
   --c-surface: 26 28 33;
@@ -33,8 +29,6 @@
   * { box-sizing: border-box; }
 
   html {
-    /* Subtle fixed radial glow instead of a flat void — the kind of depth
-       cue flat "generated" dark UIs almost never bother with. */
     background-color: rgb(var(--c-bg));
     background-image: radial-gradient(ellipse 900px 500px at 15% -10%, rgb(var(--c-accent) / 0.05), transparent 60%);
     background-attachment: fixed;
