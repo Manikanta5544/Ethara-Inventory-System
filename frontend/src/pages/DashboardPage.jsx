@@ -1,4 +1,4 @@
-import { AlertTriangle, DollarSign, Package, ShoppingCart, TrendingUp, Users } from "lucide-react";
+import { AlertTriangle, DollarSign, Package, ShoppingCart, TrendingUp, Users, WifiOff } from "lucide-react";
 import { Link } from "react-router-dom";
 import { StatCard } from "../features/dashboard/components/StatCard";
 import { useDashboard } from "../features/dashboard/hooks/useDashboard";
@@ -8,13 +8,13 @@ import { Skeleton } from "../shared/components/ui/Skeleton";
 import { PageHeader } from "../shared/components/layout/PageHeader";
 
 function stockBadge(qty) {
-  if (qty === 0) return "badge-red";
+  if (qty <= 2) return "badge-red";
   if (qty <= 5) return "badge-yellow";
   return "badge-gray";
 }
 
 export function DashboardPage() {
-  const { data: summary, isLoading } = useDashboard();
+  const { data: summary, isLoading, isError } = useDashboard();
   const { data: prodData } = useProducts({ low_stock: true, limit: 10 });
   const lowStockItems = prodData?.data ?? [];
 
@@ -37,6 +37,13 @@ export function DashboardPage() {
     <div className="p-8 max-w-7xl">
       <PageHeader title="Dashboard" description="Real-time overview of your inventory and operations." />
 
+      {isError && (
+        <div className="flex items-center gap-2.5 rounded-xl border border-warning/30 bg-warning/10 px-4 py-3 text-sm text-warning mb-8">
+          <WifiOff className="w-4 h-4 shrink-0" aria-hidden="true" />
+          Couldn't reach the API — check that the backend is running and reachable, then refresh.
+        </div>
+      )}
+
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-px bg-border rounded-2xl border border-border overflow-hidden mb-10">
         {isLoading
           ? Array.from({ length: 6 }).map((_, i) => (
@@ -50,7 +57,7 @@ export function DashboardPage() {
       </div>
 
       {lowStockItems.length > 0 && (
-        <div className="card p-6 mb-10">
+        <div className="card border-l-2 border-l-danger p-6 mb-10">
           <div className="flex items-center gap-2 mb-4">
             <AlertTriangle className="w-4 h-4 text-danger" aria-hidden="true" />
             <h2 className="text-sm font-semibold text-ink">Low Stock Alert ({lowStockItems.length} products)</h2>
@@ -58,8 +65,8 @@ export function DashboardPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
             {lowStockItems.map((p) => (
               <div key={p.id} className="flex justify-between items-center bg-elevated border border-border rounded-lg px-3 py-2 text-xs">
-                <span className="font-medium text-ink">{p.name}</span>
-                <span className={stockBadge(p.stock_quantity)}>{p.stock_quantity} left</span>
+                <span className="font-medium text-ink truncate mr-2">{p.name}</span>
+                <span className={`${stockBadge(p.stock_quantity)} shrink-0`}>{p.stock_quantity} left</span>
               </div>
             ))}
           </div>
@@ -72,7 +79,7 @@ export function DashboardPage() {
       <div className="card flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-border overflow-hidden">
         {quickActions.map(({ to, label, Icon }) => (
           <Link key={to} to={to} className="flex-1 flex items-center gap-3 px-5 py-4 hover:bg-elevated transition-colors duration-150 group">
-            <Icon className="w-4 h-4 text-ink-muted group-hover:text-primary-500 transition-colors duration-150 shrink-0" aria-hidden="true" />
+            <Icon className="w-4 h-4 text-ink-secondary group-hover:text-primary-500 transition-colors duration-150 shrink-0" aria-hidden="true" />
             <span className="text-sm font-medium text-ink-secondary group-hover:text-ink transition-colors duration-150">{label}</span>
           </Link>
         ))}
