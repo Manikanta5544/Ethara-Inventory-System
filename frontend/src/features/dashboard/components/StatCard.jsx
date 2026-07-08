@@ -16,8 +16,8 @@ export function StatCard({ title, value, icon: Icon, color, subtitle }) {
         <span className="text-xs font-medium text-ink-muted uppercase tracking-wider truncate">{title}</span>
       </div>
       <div>
-        <p className="text-[28px] leading-none font-bold text-ink tracking-tight tabular-nums">{value ?? "—"}</p>
-        {subtitle && <p className="text-xs text-ink-muted truncate mt-1.5">{subtitle}</p>}
+        <p className="text-xl leading-none font-bold text-ink tracking-tight tabular-nums truncate" title={typeof value === "string" ? value : undefined}>{value ?? "—"}</p>
+        <p className="text-xs text-ink-muted truncate mt-1.5 h-4">{subtitle || "\u00A0"}</p>
       </div>
     </div>
   );
