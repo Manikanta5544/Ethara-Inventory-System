@@ -55,6 +55,8 @@
   ::-webkit-scrollbar-thumb:hover { background: rgb(var(--c-ink-muted)); }
 }
 
+/* Components required for the UI */
+
 @layer components {
   .card {
     @apply bg-surface rounded-2xl border border-border;

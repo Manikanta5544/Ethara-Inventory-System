@@ -40,7 +40,8 @@ export function OrderDetailPage() {
           )}
         </div>
       </div>
-
+          
+      {/* Customer Information */}
       <div className="card p-4 mb-4">
         <div className="flex items-center gap-2 mb-2">
           <User className="w-4 h-4 text-gray-400" />

@@ -13,11 +13,14 @@ function stockBadge(qty) {
   return "badge-gray";
 }
 
+
+
 export function DashboardPage() {
   const { data: summary, isLoading, isError } = useDashboard();
   const { data: prodData } = useProducts({ low_stock: true, limit: 10 });
   const lowStockItems = prodData?.data ?? [];
 
+  // Stats and quick actions
   const stats = [
     { title: "Products",        value: summary?.total_products,  icon: Package,       subtitle: null },
     { title: "Customers",       value: summary?.total_customers, icon: Users,         subtitle: null },
